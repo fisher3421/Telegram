@@ -140,6 +140,7 @@ public class SearchAdapterHelper {
                             if (localSearchResults != null) {
                                 mergeResults(localSearchResults);
                             }
+                            channelReqId = 0;
                             delegate.onDataSetChanged();
                         }
                     }
@@ -242,6 +243,7 @@ public class SearchAdapterHelper {
                                 mergeResults(localSearchResults);
                             }
                             mergeExcludeResults();
+                            reqId = 0;
                             delegate.onDataSetChanged();
                         }
                     }

@@ -163,7 +163,9 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             public void onDataSetChanged() {
                 searchWas = true;
                 if (!searchAdapterHelper.isSearchInProgress() && delegate != null) {
-                    delegate.searchStateChanged(false);
+                    if (getItemCount() > 0 || reqId == 0) {
+                        delegate.searchStateChanged(false);
+                    }
                 }
                 notifyDataSetChanged();
             }
@@ -282,7 +284,9 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                 }
             }
             if (delegate != null) {
-                delegate.searchStateChanged(false);
+                if (!searchAdapterHelper.isSearchInProgress() || getItemCount() > 0) {
+                    delegate.searchStateChanged(false);
+                }
             }
             reqId = 0;
         }), ConnectionsManager.RequestFlagFailOnServerErrors);
@@ -805,7 +809,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             searchAdapterHelper.mergeResults(searchResult);
             notifyDataSetChanged();
             if (delegate != null) {
-                if (getItemCount() == 0 && (searchRunnable2 != null || searchAdapterHelper.isSearchInProgress())) {
+                if (searchRunnable2 != null || searchAdapterHelper.isSearchInProgress()) {
                     delegate.searchStateChanged(true);
                 } else {
                     delegate.searchStateChanged(false);
