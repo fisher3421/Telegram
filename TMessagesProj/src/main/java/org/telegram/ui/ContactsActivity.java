@@ -236,14 +236,6 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             public void onSearchCollapse() {
                 searchListViewAdapter.searchDialogs(null);
                 searching = false;
-                searchWas = false;
-                listView.setAdapter(listViewAdapter);
-                listView.setSectionsType(1);
-                listViewAdapter.notifyDataSetChanged();
-                listView.setFastScrollVisible(true);
-                listView.setVerticalScrollBarEnabled(false);
-                listView.setEmptyView(null);
-                emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
                 if (floatingButtonContainer != null) {
                     floatingButtonContainer.setVisibility(View.VISIBLE);
                     floatingHidden = true;
@@ -253,6 +245,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 if (sortItem != null) {
                     sortItem.setVisibility(View.VISIBLE);
                 }
+                showContacts();
             }
 
             @Override
@@ -274,8 +267,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                         listView.setEmptyView(emptyView);
                         emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
                     }
+                    searchListViewAdapter.searchDialogs(text);
+                } else {
+                    showContacts();
                 }
-                searchListViewAdapter.searchDialogs(text);
             }
         });
         item.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
@@ -547,6 +542,20 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         }
 
         return fragmentView;
+    }
+
+    private void showContacts() {
+        searchListViewAdapter.searchDialogs(null);
+        searchWas = false;
+        if (listView.getAdapter() != listViewAdapter) {
+            listView.setAdapter(listViewAdapter);
+            listView.setSectionsType(1);
+            listViewAdapter.notifyDataSetChanged();
+            listView.setFastScrollVisible(true);
+            listView.setVerticalScrollBarEnabled(false);
+            listView.setEmptyView(null);
+            emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
+        }
     }
 
     private void didSelectResult(final TLRPC.User user, boolean useAlert, String param) {
